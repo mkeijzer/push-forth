@@ -104,6 +104,7 @@ public class Instructions {
 		return Programs.list(a, a);
 	}
 
+	@InstructionTest(tests = {"[[swap pop a =] a b ]"})
 	@Unpack
 	public static Program swapfunc(Object a, Object b) {
 		return Programs.list(a, b);

@@ -11,6 +11,9 @@ import org.arg.pushforth.program.Programs;
 import org.junit.Assert;
 import org.junit.Test;
 
+/*
+ * Runs the tests in the annotations of individual instructions
+ */
 public class PushForthTests {
 
 	static {
@@ -62,6 +65,8 @@ public class PushForthTests {
 					}
 
 				}
+			} else {
+				System.err.println("Method " + m.getName() + " defined on " + m.getDeclaringClass().getName() + " has no associated tests.");
 			}
 		}
 	}
