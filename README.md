@@ -1,2 +1,2 @@
 # push-forth
-Implementation of push-forth genetic programming language
+Implementation of the push-forth genetic programming language
