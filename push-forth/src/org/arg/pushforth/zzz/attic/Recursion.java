@@ -1,5 +1,6 @@
 package org.arg.pushforth.zzz.attic;
 
+import org.arg.pushforth.annotations.InstructionName;
 import org.arg.pushforth.annotations.Unpack;
 import org.arg.pushforth.dictionary.InstructionFactory;
 import org.arg.pushforth.instructions.Instruction;
@@ -15,6 +16,7 @@ public class Recursion {
 	}
 	
 	@Unpack
+	@InstructionName(name="primrec")
 	public static Program primrecint(Program action, Program ifzero, Long value) {
 		if (value == 0) {
 			return ifzero;
@@ -25,7 +27,7 @@ public class Recursion {
 		Program ret = Programs.cons(v, ifzero, action, primrecint, value ,action);
 		return ret;
 	}
-	public static Instruction primrecint = InstructionFactory.make(Instructions.class, "primrecint", "primrec");
+	public static Instruction primrecint = InstructionFactory.make(Instructions.class, "primrecint");
 
 	@Unpack
 	public static Program primreclist(Program action, Program ifzero, Program value) {
@@ -35,7 +37,7 @@ public class Recursion {
 		Program ret = Programs.cons(value.rest(), ifzero, action, primreclist, value.first(), action);
 		return ret;
 	}
-	public static Instruction primreclist = InstructionFactory.make(Instructions.class, "primreclist", "primrec");
+	public static Instruction primreclist = InstructionFactory.make(Instructions.class, "primreclist");
 
 	public static Instruction ifte = (Instruction) Programs.parse("[?]").first();
 	// TODO

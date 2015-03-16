@@ -99,7 +99,7 @@ public class TestInstructionsWithDeletePolicy extends Instructions {
 		test(prog, expected);
 
 		prog = list(list(swap), 1);
-		expected = list(nil, 1);
+		expected = list(nil);
 		test(prog, expected);
 
 		prog = list(list(swap, "halt"), 1, list(1));

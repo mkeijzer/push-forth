@@ -2,7 +2,7 @@ package org.arg.pushforth.dictionary;
 
 import org.arg.pushforth.program.Program;
 
-interface Predicate {
+public interface Predicate {
 	boolean appliesTo(Object obj, Program args);
 
 	public static final class TypePredicate implements Predicate {

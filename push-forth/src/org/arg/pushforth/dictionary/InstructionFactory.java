@@ -1,5 +1,6 @@
 package org.arg.pushforth.dictionary;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.arg.pushforth.annotations.AdditionalArgumentChecks;
 import org.arg.pushforth.annotations.InstructionName;
 import org.arg.pushforth.dictionary.Predicate.TypePredicate;
 import org.arg.pushforth.instructions.Instruction;
@@ -34,7 +36,7 @@ public class InstructionFactory {
 	private static Predicate[] createStaticPredicates(Method method) {
 		methodList.add(method);
 		Class<?>[] types = method.getParameterTypes();
-		TypePredicate[] predicates = new TypePredicate[types.length];
+		Predicate[] predicates = new Predicate[types.length];
 		for (int i = 0; i < predicates.length; ++i) {
 			predicates[i] = new TypePredicate(types[i]);
 		}
@@ -44,7 +46,7 @@ public class InstructionFactory {
 	private static Predicate[] createMemberPredicates(Method method) {
 		methodList.add(method);
 		Class<?>[] types = method.getParameterTypes();
-		TypePredicate[] predicates = new TypePredicate[1 + types.length];
+		Predicate[] predicates = new Predicate[1 + types.length];
 
 		predicates[types.length] = new TypePredicate(method.getDeclaringClass());
 		for (int i = 0; i < types.length; ++i) {
@@ -55,9 +57,14 @@ public class InstructionFactory {
 	}
 
 	public static Instruction make(Class<?> clazz, String name) {
-		return make(clazz, name, name);
+		return make(clazz, name, "");
 	}
-	public static Instruction make(Class<?> clazz, String name, String alias) {
+	
+	public static Instruction make(Class<?> clazz, String name, Predicate[] preds) {
+		return make(clazz, name, "", preds);
+	}
+
+	private static Instruction make(Class<?> clazz, String name, String alias) {
 				
 		Instruction ins = null;
 		for (Method m : clazz.getDeclaredMethods()) {
@@ -69,6 +76,19 @@ public class InstructionFactory {
 		return ins;
 	}
 
+	public static Instruction make(Class<?> clazz, String name, String alias, Predicate[] preds) {
+		
+		Instruction ins = null;
+		for (Method m : clazz.getDeclaredMethods()) {
+			if (m.getName().equals(name)) {
+				ins = handleMember(m, alias, preds);
+			}
+		}
+
+		return ins;
+	}
+
+	
 	private InstructionFactory() {
 	}
 
@@ -107,17 +127,57 @@ public class InstructionFactory {
 	private static Instruction handleMember(Method m, 
 			String alias) {
 
-
 		int mods = m.getModifiers();
-		DynamicInstruction ins = null;
 		Predicate[] preds;
 		if (Modifier.isStatic(mods)) {
 			preds = createStaticPredicates(m);
 		} else {
 			preds = createMemberPredicates(m);
 		}
-		ins = new DynamicInstruction(m, alias, preds);
+		return handleMember(m, alias, preds);
+	}
+	
+	private static Instruction handleMember(Method m, String alias, Predicate[] preds) {
 		
+		
+		if (alias.isEmpty() || alias == null) {
+			InstructionName insName = m.getAnnotation(InstructionName.class);
+			if (insName == null) {
+				alias = m.getName();
+			} else {
+				alias = insName.name();
+			}
+		}
+				
+		// Check if there are additional parameters to be loaded
+		AdditionalArgumentChecks additional = m.getAnnotation(AdditionalArgumentChecks.class);
+		if (additional != null) {
+			String[] names = additional.predicates();
+			Class<?> clazz = m.getDeclaringClass();
+			
+			if (names.length != preds.length) {
+				throw new RuntimeException("Initialize Instruction: wrong number of predicates wrt number of function arguments");
+			}
+
+			for (int i = 0; i < preds.length; ++i) {
+				try {
+					Field predicateField = clazz.getField(names[i]);
+					Predicate pred = (Predicate) predicateField.get(null); // has to be static
+					preds[i] = Predicates.and(preds[i], pred);
+				} catch (SecurityException e) {
+					throw new RuntimeException("Security excpetion when loading predicate");
+				} catch (NoSuchFieldException e) {
+					throw new RuntimeException("No such (public static) field: " + names[i] + " on class " + clazz);
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		
+		DynamicInstruction ins = new DynamicInstruction(m, alias, preds);		
 		return addInstruction(alias, ins);
 	}
 	

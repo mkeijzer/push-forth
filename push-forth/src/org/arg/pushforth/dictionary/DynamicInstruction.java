@@ -133,6 +133,7 @@ class DynamicInstruction implements Instruction {
 			// throw new RuntimeException(e);
 		}
 
+		// pushes 'this' back on the stack
 		if (isMemberFunc) {
 			tmp = Programs.cons(member, tmp);
 		}
@@ -146,7 +147,6 @@ class DynamicInstruction implements Instruction {
 		} else {
 			return Programs.cons(Program.nil, tmp);
 		}
-
 	}
 
 	public Object run(Program objs) throws IllegalArgumentException,

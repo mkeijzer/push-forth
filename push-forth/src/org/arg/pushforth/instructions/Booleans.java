@@ -26,10 +26,11 @@ public class Booleans {
 	}
 	
 	@InstructionTest(tests={"[[=] a a]", "[[= !] a b]"})
+	@InstructionName(name="=")
 	public static Boolean eq(Object a, Object b) {
 		return a.equals(b);
 	}
-	public static Instruction eq = InstructionFactory.make(Booleans.class, "eq", "=");
+	public static Instruction eq = InstructionFactory.make(Booleans.class, "eq");
 
 	@InstructionTest(tests={"[[typeof 1 typeof = !] a]", "[[typeof a typeof =] b]"})
 	public static Class<?> typeof(Object a) {

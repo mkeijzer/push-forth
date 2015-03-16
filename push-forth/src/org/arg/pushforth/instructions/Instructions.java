@@ -105,13 +105,14 @@ public class Instructions {
 	}
 
 	@InstructionTest(tests = {"[[swap pop a =] a b ]"})
+	@InstructionName(name="swap")
 	@Unpack
 	public static Program swapfunc(Object a, Object b) {
 		return Programs.list(a, b);
 	}
 
 	public static Instruction swap = InstructionFactory.make(
-			Instructions.class, "swapfunc", "swap");
+			Instructions.class, "swapfunc");
 
 	@InstructionName(name="cons")
 	public static Program consFunc(Object obj, Program prog) {

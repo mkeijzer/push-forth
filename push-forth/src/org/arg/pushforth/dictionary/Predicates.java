@@ -4,7 +4,7 @@ import org.arg.pushforth.program.Program;
 
 class Predicates {
 
-	public static Predicate And(final Predicate first, final Predicate second) {
+	public static Predicate and(final Predicate first, final Predicate second) {
 		return new Predicate() {
 
 			@Override
@@ -15,7 +15,7 @@ class Predicates {
 		};
 	}
 
-	public static Predicate Or(final Predicate first, final Predicate second) {
+	public static Predicate or(final Predicate first, final Predicate second) {
 		return new Predicate() {
 
 			@Override
