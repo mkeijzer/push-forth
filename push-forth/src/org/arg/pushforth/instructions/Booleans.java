@@ -15,11 +15,13 @@ public class Booleans {
 	}
 	
 	
+	@InstructionTest(tests={"[[true true &&]]", "[[true false && !]]"})
 	@InstructionName(name = "&&")
 	public static Boolean and(Boolean a, Boolean b) {
 		return a&&b;
 	}
 	
+	@InstructionTest(tests={"[[false !]]", "[[true ! !]]"})
 	@InstructionName(name = "!")
 	public static Boolean not(Boolean a) {
 		return !a;

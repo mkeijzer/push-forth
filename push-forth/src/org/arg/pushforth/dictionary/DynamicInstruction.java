@@ -130,7 +130,7 @@ class DynamicInstruction implements Instruction {
 			// throw new RuntimeException(e);
 		} catch (InvocationTargetException e) {
 			obj = e.getCause();
-			// throw new RuntimeException(e);
+			//throw new RuntimeException(e);
 		}
 
 		// pushes 'this' back on the stack

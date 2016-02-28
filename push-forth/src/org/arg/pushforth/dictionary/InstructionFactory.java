@@ -195,15 +195,22 @@ public class InstructionFactory {
 			SymbolTable.put(name, ins);
 			return ins;
 		} 
-		
+				
 		// check if there are issues
 		int i = 0;
 		for(i = 0; i < instructions.size(); ++i) {
 			Method m1 = ins.getMethod();
 			Method m2 = instructions.get(i).getMethod();
+
+			Class<?>[] param1 = m1.getParameterTypes();
+			Class<?>[] param2 = m2.getParameterTypes();
 			
-			Class<?> firstType = m1.getParameterTypes()[0];
-			Class<?> secondType = m2.getParameterTypes()[0];
+			if (param1.length == 0 || param2.length == 0) {
+				throw new RuntimeException("Overloading an instruction with no arguments: " + m1 + " " + m2);
+			}
+			
+			Class<?> firstType = param1[0];
+			Class<?> secondType = param2[0];
 			
 			if (firstType.isAssignableFrom(secondType)) {
 				break;

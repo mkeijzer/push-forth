@@ -114,43 +114,57 @@ public class Instructions {
 	public static Instruction swap = InstructionFactory.make(
 			Instructions.class, "swapfunc");
 
+	@InstructionTest(tests={"[[[1] 2 cons [2 1] =]]"})
 	@InstructionName(name="cons")
 	public static Program consFunc(Object obj, Program prog) {
 		return Programs.cons(obj, prog);
 	}
 
+	@InstructionTest(tests={"[[true i]]]"})
 	@InstructionName(name = "i")
 	@Unpack
 	public static Program ifunc(Program prog) {
 		return prog;
 	}
 
+	@InstructionTest(tests={"[[true [x] [y] ? x =]]", "[[false [x] [y] ? y =]]"})
 	@InstructionName(name = "?")
 	@Unpack
 	public static Program ifte(Program y, Program x, Boolean b) {
 		return b ? x : y;
 	}
 
-
+	@InstructionTest(tests={"[[true false pop]]"})
 	@InstructionName(name = "pop")
 	public static void pop(Object o) {
 	}
 
+	@InstructionTest(tests={"[[nil isnil?]]"})
+	@InstructionName(name = "isnil?")
+	public static boolean isEmpty(Program o) {
+		return o.isEmpty();
+	}
+	
+	@InstructionTest(tests={"[[nil isnil?]]"})
 	@InstructionName(name = "nil")
 	public static Program nil() {
 		return Program.nil;
 	}
 
+	@InstructionTest(tests={"[[[1] 2 cons car 2 =]]"})
 	@InstructionName(name = "car")
 	public static Object first(Program prog) {
 		return prog.isEmpty() ? Program.nil : prog.first();
 	}
 
+	
+	@InstructionTest(tests={"[[[1] 2 cons cdr [1] =]]"})
 	@InstructionName(name = "cdr")
-	public static Object rest(Program prog) {
+	public static Program rest(Program prog) {
 		return prog.isEmpty() ? Program.nil : prog.rest();
 	}
 
+	@InstructionTest(tests={"[[[1] [2] append car 2 =]]"})
 	@InstructionName(name = "append")
 	public static Program append(Program x, Program y) {
 		return Programs.append(x, y);

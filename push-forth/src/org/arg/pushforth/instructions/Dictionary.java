@@ -8,6 +8,11 @@ import org.arg.pushforth.annotations.InstructionTest;
 import org.arg.pushforth.dictionary.InstructionFactory;
 import org.arg.pushforth.program.Program;
 
+/**
+ * Implements a 'Dictionary' type -- an associative array
+ * @author MaartenKeijzer
+ *
+ */
 public class Dictionary {
 
 	static {

@@ -8,7 +8,6 @@ import org.arg.pushforth.program.Program;
 public class Numbers {
 
 	static {
-		Instructions.load();
 		InstructionFactory.readMembers(Numbers.class);
 	}
 
