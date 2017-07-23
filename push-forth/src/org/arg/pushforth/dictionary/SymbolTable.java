@@ -1,13 +1,13 @@
 package org.arg.pushforth.dictionary;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.arg.pushforth.instructions.Arrays;
 import org.arg.pushforth.instructions.Booleans;
 import org.arg.pushforth.instructions.Code;
 import org.arg.pushforth.instructions.Dictionary;
@@ -37,7 +37,6 @@ public class SymbolTable {
 		Numbers.load();
 		Code.load();
 		Dictionary.load();
-		Arrays.load();
 	}
 	
 	public static Instruction getInstruction(String name) {

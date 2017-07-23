@@ -18,6 +18,7 @@ public class PushForthTests {
 
 	static {
 		InstructionFactory.readMembers(PushForthTests.class);
+		org.arg.img_instructions.Instructions.load();
 	}
 
 	public static Program runTest(Program prog, boolean step) {
@@ -50,9 +51,11 @@ public class PushForthTests {
 
 			if (ann != null) {
 				for (String t : ann.tests()) {
-					System.out.println("Running test " + t + " for method "
-							+ m.getName() + " defined in "
-							+ m.getDeclaringClass().getName());
+					
+//					System.out.println("Running test " + t + " for method "
+//							+ m.getName() + " defined in "
+//							+ m.getDeclaringClass().getName());
+					
 					Program prog = Programs.parse(t);
 					Program res = runTest(prog, false);
 
@@ -60,6 +63,7 @@ public class PushForthTests {
 					if (result == null || !(result instanceof Boolean)
 							|| ((Boolean) result) != true
 							|| res.rest().rest() != Program.nil) {
+						System.err.println("Test for method: " + m + " failed.");
 						runTest(prog, true);
 						Assert.fail();
 					}

@@ -9,7 +9,8 @@ import org.junit.runners.Suite;
 		TestInstructions.class, TestInstructionFactory.class,
 		TestIntegers.class, TestInstructionsWithDeletePolicy.class,
 		TestDistance.class, TestOverloading.class, TestInterpreter.class, 
-		PushForthTests.class,
+		PushForthTests.class
+		
 })
 
 public class AllTests {

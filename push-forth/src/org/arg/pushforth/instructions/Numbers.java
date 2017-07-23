@@ -12,6 +12,14 @@ public class Numbers {
 	}
 
 	public static void load() {}
+
+	public static int toIndex(Number value, int sz) {
+		int v = (int) Math.abs(value.longValue());
+		if (v >= sz) {
+			v = sz-1;
+		}
+		return v;
+	}
 	
 	@InstructionTest(tests = { "[[num?] 1]", "[[num?] 2.3]" })
 	@InstructionName(name = "num?")
@@ -19,27 +27,31 @@ public class Numbers {
 		return a instanceof Number;
 	}
 
-	@InstructionTest(tests = { "[[1 1 + 2 =]]", "[[+ 2 =] 1 1.1]]" })
+	@InstructionTest(tests = { "[[1.2 1 + 2 =]]" })
 	@InstructionName(name = "+")
 	public static Long add(Long a, Number b) {
 		return a + b.longValue();
 	}
 
+	@InstructionTest(tests = { "[[3 - -3 =]]" })
 	@InstructionName(name = "-")
 	public static Long min(Long a) {
 		return -a;
 	}
 
+	@InstructionTest(tests = { "[[2.1 2 * 4 =]]" })
 	@InstructionName(name = "*")
 	public static Long mul(Long a, Number b) {
 		return a * b.longValue();
 	}
 
+	@InstructionTest(tests = { "[[2.1 2 / 1 =]]" })
 	@InstructionName(name = "/")
 	public static Object div(Long a, Number b) {
 		return a / b.longValue();
 	}
 
+	@InstructionTest(tests = { "[[2.1 2 % 0 =]]" })
 	@InstructionName(name = "%")
 	public static Object mod(Long a, Number num) {
 		long b = num.longValue();
@@ -50,58 +62,46 @@ public class Numbers {
 		}
 	}
 
+	@InstructionTest(tests={"[[3 1 << 8 =]]"})
 	@InstructionName(name = "<<")
-	public static Long rightShift(Long a, Number b) {
-		return a << b.longValue();
+	public static Long rightShift(Number a, Number b) {
+		return a.longValue() << b.longValue();
 	}
 
+	@InstructionTest(tests={"[[2 16 >> 4 =]]"})
 	@InstructionName(name = ">>")
-	public static Long leftShift(Long a, Number b) {
-		return a >> b.longValue();
+	public static Long leftShift(Number a, Number b) {
+		return a.longValue() >> b.longValue();
 	}
 
 	@InstructionName(name = ">>>")
-	public static Long unsignedLeftShift(Long a, Number b) {
-		return a >>> b.longValue();
+	public static Number unsignedLeftShift(Number a, Number b) {
+		return a.longValue() >>> b.longValue();
 	}
 
 	@InstructionName(name = "&")
-	public static Long bitwiseAnd(Long a, Number b) {
-		return a & b.longValue();
+	public static Number bitwiseAnd(Number a, Number b) {
+		return a.longValue() & b.longValue();
 	}
 
 	@InstructionName(name = "|")
-	public static Long bitwiseOr(Long a, Number b) {
-		return a | b.longValue();
+	public static Number bitwiseOr(Number a, Number b) {
+		return a.longValue() | b.longValue();
 	}
 
 	@InstructionName(name = "~")
-	public static Long bitwiseNot(Long a) {
-		return ~a;
+	public static Number bitwiseNot(Number a) {
+		return ~a.longValue();
 	}
 
-	@InstructionName(name = ">")
-	public static Boolean gr(Long a, Number b) {
-		return a > b.longValue();
-	}
-
-	@InstructionName(name = "1")
-	public static Long one() {
-		return 1L;
-	}
-
-	@InstructionTest(tests={"[[empty?] 0]", "[[empty? !] 1.]"})
-	@InstructionName(name = "empty?")
+	@InstructionTest(tests={"[[zero?] 0]", "[[zero? !] 1.]"})
+	@InstructionName(name = "zero?")
 	public static Boolean empty(Number prog) {
 		return prog.doubleValue() == 0.0;
 	}
 
 	
-	@InstructionName(name = "1.0")
-	public static Double oneDouble() {
-		return 1.0;
-	}
-
+	@InstructionTest(tests={"[[i2f 2.0 =] 2]", "[[i2f 2 = !] 2]"})
 	@InstructionName(name = "i2f")
 	public static Double fromInt(Long v) {
 		return v.doubleValue();
@@ -113,49 +113,73 @@ public class Numbers {
 		return a + b.doubleValue();
 	}
 
+	
+	@InstructionTest(tests={"[[1 - -1 =]]", "[[1 - -1.0 = !]]", "[[1.0 - -1.0 =]]"})
 	@InstructionName(name = "-")
-	public static Double min(Double a) {
-		return -a;
+	public static Object min(Number a) {
+		if (a instanceof Long) {
+			return  Long.valueOf(-a.longValue());
+		}
+		return -a.doubleValue();
 	}
 
+	@InstructionTest(tests={"[[2 0.5 * 1.0 =]]"})
 	@InstructionName(name = "*")
 	public static Double mul(Double a, Number b) {
 		return a * b.doubleValue();
 	}
 
+	@InstructionTest(tests={"[[2 1.0 / 0.5 =]]"})
 	@InstructionName(name = "/")
 	public static Double div(Double a, Number b) {
 		return a / b.doubleValue();
 	}
 
+	@InstructionTest(tests={"[[2 3.0 % 1.0 =]]"})
 	@InstructionName(name = "%")
 	public static Double mod(Double a, Number b) {
 		return a % b.doubleValue();
 	}
 
+	@InstructionTest(tests={"[[4 sqrt 2.0 =]]"})
 	@InstructionName(name = "sqrt")
-	public static Double sqrt(Double a) {
-		return Math.sqrt(a);
+	public static Double sqrt(Number a) {
+		return Math.sqrt(a.doubleValue());
 	}
 
+	@InstructionTest(tests={"[[4 2 pow 16.0 =]]"})
 	@InstructionName(name = "pow")
-	public static Double pow(Double a, Number b) {
-		return Math.pow(a, b.doubleValue());
+	public static Double pow(Number a, Number b) {
+		return Math.pow(a.doubleValue(), b.doubleValue());
 	}
 
+	@InstructionTest(tests={"[[3 4 > ]]"})
 	@InstructionName(name = ">")
-	public static Boolean gr(Double a, Number b) {
-		return a > b.doubleValue();
+	public static Boolean gr(Number a, Number b) {
+		return a.doubleValue() > b.doubleValue();
 	}
 
+	@InstructionTest(tests={"[[3 2 < ]]"})
+	@InstructionName(name = "<")
+	public static Boolean lt(Number a, Number b) {
+		return a.doubleValue() < b.doubleValue();
+	}
+	
+	@InstructionTest(tests={"[[3 4 max 4 = ]]"})
 	@InstructionName(name = "max")
-	public static Double max(Double a, Number b) {
-		return Math.max(a, b.doubleValue());
+	public static Number max(Number a, Number b) {
+		if (a.doubleValue() > b.doubleValue()) {
+			return a;
+		}
+		return b;
 	}
 
+	@InstructionTest(tests={"[[3 4 min 3 = ]]"})
 	@InstructionName(name = "min")
-	public static Long max(Long a, Number b) {
-		return Math.max(a, b.longValue());
+	public static Number min(Number a, Number b) {
+		if (a.doubleValue() < b.doubleValue()) {
+			return a;
+		}
+		return b;
 	}
-
 }
