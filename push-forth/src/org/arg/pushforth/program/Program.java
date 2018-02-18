@@ -9,6 +9,7 @@ package org.arg.pushforth.program;
 public interface Program {
 
 	public static Program nil = new ArrayProgram();
+	public static Program halted = new SingletonProgram(nil);
 	
 	Object first();
 	Program rest();

@@ -31,7 +31,8 @@ public class Step {
 	public static void main(String[] args) {
 		InstructionFactory.readMembers(Step.class);
 		
-		String[] a = {"[ [4 [1] nil primrec pop cons pop pop * list? + [*] bool? i + / * primrec << + >> && 1 *]]"};
+		//String[] a = {"[ [4 [1] nil primrec pop cons pop pop * list? + [*] bool? i + / * primrec << + >> && 1 *]]"};
+		String a = "[[dup i] [dup i] [[dup i] dup i]]";
 		Main.run(a, true);
 	}
 

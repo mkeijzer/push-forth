@@ -62,15 +62,4 @@ public class TestIntegers {
 				
 	}
 
-	@Test 
-	public void testOne() {		
-		Instruction one = SymbolTable.get("1");
-		
-		Program prog     = Programs.list(Programs.list(one));				
-		Program expected = Programs.list(Programs.list(), 1);
-		
-		TestInstructions.test(prog, expected);
-				
-	}
-
 }

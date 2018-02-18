@@ -17,11 +17,6 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		run(args, true);
-	}
-	
-	public static void run(String[] args, boolean step) {
-		
 		String concat = "[[";
 		for (int i = 0; i < args.length; ++i) {
 			concat += " " + args[i];
@@ -30,6 +25,12 @@ public class Main {
 
 		
 		System.out.println("Concat: " + concat);
+
+		run(concat, true);
+	}
+	
+	public static void run(String concat, boolean step) {
+		
 	
 		Program prog = Programs.parse(concat);
 		System.out.println("Prog = " + prog);

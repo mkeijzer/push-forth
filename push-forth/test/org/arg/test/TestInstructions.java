@@ -2,14 +2,10 @@ package org.arg.test;
 import static org.arg.pushforth.program.Programs.list;
 import static org.junit.Assert.fail;
 
-import org.arg.pushforth.dictionary.InstructionFactory;
 import org.arg.pushforth.dictionary.PushBackPolicy;
 import org.arg.pushforth.dictionary.SymbolTable;
-import org.arg.pushforth.evolve.WordList;
-import org.arg.pushforth.instructions.Booleans;
 import org.arg.pushforth.instructions.Instruction;
 import org.arg.pushforth.instructions.Instructions;
-import org.arg.pushforth.instructions.Numbers;
 import org.arg.pushforth.program.Program;
 import org.arg.pushforth.program.Programs;
 import org.junit.Test;

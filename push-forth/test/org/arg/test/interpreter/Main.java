@@ -4,7 +4,6 @@ import org.arg.pushforth.instructions.Instructions;
 import org.arg.pushforth.instructions.Numbers;
 import org.arg.pushforth.program.Program;
 import org.arg.pushforth.program.Programs;
-import org.arg.pushforth.evolve.WordList;
 
 public class Main {
 
@@ -13,7 +12,6 @@ public class Main {
 	static {
 		Numbers.load();
 		Instructions.load();
-		WordList.load();
 	}
 	
 	public static void main(String[] args) {

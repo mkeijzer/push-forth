@@ -1,5 +1,7 @@
 package org.arg.pushforth.dictionary;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -17,15 +19,24 @@ class DynamicInstruction implements Instruction {
 	final Predicate[] args;
 	final boolean unpack;
 	final boolean isMemberFunc;
-	
+
+	// TODO, use method handles
+//	final static java.lang.invoke.MethodHandles.Lookup lookup = MethodHandles.lookup();
+//	final MethodHandle mh;
+
 	public DynamicInstruction(Method method, String alias, Predicate[] args) {
 		this.method = method;
 		this.name = alias;
 		this.args = args;
-		this.isMemberFunc = Modifier.isStatic(method.getModifiers()) ? false
-				: true;
+		this.isMemberFunc = Modifier.isStatic(method.getModifiers()) ? false : true;
 
 		unpack = method.getAnnotation(Unpack.class) != null;
+
+//		try {
+//			mh = lookup.unreflect(method);
+//		} catch (IllegalAccessException e) {
+//			throw new RuntimeException(e);
+//		}
 	}
 
 	public Predicate[] getArgs() {
@@ -37,25 +48,26 @@ class DynamicInstruction implements Instruction {
 			return arg;
 		}
 		if (data.isEmpty()) {
-			return 0; // too few arguments, there is no way that this instruction can be applied
+			return 0; // too few arguments, there is no way that this
+						// instruction can be applied
 		}
-		
+
 		Object first = data.first();
 		data = data.rest();
 		if (!args[arg].appliesTo(first, data)) {
 			return arg;
 		}
-		
-		return matchCount(data, arg+1);
+
+		return matchCount(data, arg + 1);
 	}
-	
+
 	public int matchCount(Program data) {
 		return matchCount(data, 0);
 	}
-	
+
 	public Program apply(Program data) {
 		Program objs = Programs.list();
-		
+
 		Program tmp = data;
 		for (Predicate pred : args) {
 
@@ -66,7 +78,7 @@ class DynamicInstruction implements Instruction {
 					tmp = Programs.cons(objs.first(), tmp);
 					objs = objs.rest();
 				}
-				return Programs.list(tmp); 
+				return Programs.list(tmp);
 			}
 
 			Object obj = tmp.first();
@@ -75,7 +87,8 @@ class DynamicInstruction implements Instruction {
 			boolean canUse = pred.appliesTo(obj, objs);
 
 			if (!canUse) {
-				// Wrong argument type -- put the arguments back on the stack and swallow the offending argument
+				// Wrong argument type -- put the arguments back on the stack
+				// and swallow the offending argument
 				Program ret = null;
 
 				switch (PushBackPolicy.INVALID_ARGUMENT_POLICY) {
@@ -107,13 +120,12 @@ class DynamicInstruction implements Instruction {
 		Object obj = null;
 		Object member = null;
 		try {
-			// TODO: replace this by a 'asm function pointer'
-			
+
 			if (isMemberFunc) {
 				member = objs.first();
 				objs = objs.rest();
 			}
-			
+
 			int len = args.length + (isMemberFunc ? -1 : 0);
 			Object[] fargs = new Object[len];
 			for (int i = len - 1; i >= 0; --i) {
@@ -122,15 +134,29 @@ class DynamicInstruction implements Instruction {
 			}
 
 			obj = method.invoke(member, fargs);
+			
+//			if (member == null) {
+//				try {
+//					System.out.println("Before " + obj);
+//					obj = mh.invoke(fargs);
+//					System.out.println("After " + obj);
+//
+//				} catch (Throwable e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+
 		} catch (IllegalArgumentException e) {
 			obj = e.getCause();
-			// throw new RuntimeException(e);
+			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
 			obj = e.getCause();
-			// throw new RuntimeException(e);
+			throw new RuntimeException(e);
 		} catch (InvocationTargetException e) {
 			obj = e.getCause();
-			//throw new RuntimeException(e);
+			// let exception be pushed on the stack
+			// throw new RuntimeException(e);
 		}
 
 		// pushes 'this' back on the stack
@@ -149,8 +175,7 @@ class DynamicInstruction implements Instruction {
 		}
 	}
 
-	public Object run(Program objs) throws IllegalArgumentException,
-			IllegalAccessException, InvocationTargetException {
+	public Object run(Program objs) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		// replace this by a 'asm function pointer'
 		int len = args.length + (isMemberFunc ? -1 : 0);
 		Object[] fargs = new Object[len];
@@ -172,6 +197,5 @@ class DynamicInstruction implements Instruction {
 	public Method getMethod() {
 		return method;
 	}
-	
 
 }

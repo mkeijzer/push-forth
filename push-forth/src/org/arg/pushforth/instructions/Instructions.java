@@ -7,6 +7,7 @@ import org.arg.pushforth.annotations.InstructionName;
 import org.arg.pushforth.annotations.InstructionTest;
 import org.arg.pushforth.annotations.Unpack;
 import org.arg.pushforth.dictionary.InstructionFactory;
+import org.arg.pushforth.dictionary.SymbolTable;
 import org.arg.pushforth.program.Program;
 import org.arg.pushforth.program.Programs;
 
@@ -51,6 +52,12 @@ public class Instructions {
 		Object obj = code.first();
 		code = code.rest();
 
+		// if first element of data is 'quote' just push the instruction
+		if (data != Program.nil && data.first() == quote) {
+			data = cons(obj, data.rest());
+			return cons(code, data);
+		}
+		
 		if (obj instanceof Instruction) {
 			Instruction ins = (Instruction) obj;
 
@@ -64,7 +71,7 @@ public class Instructions {
 			}
 
 			Object ret = result.first();
-
+			
 			if (!(ret instanceof Program)) { // got something of the form [x y
 												// z] , so no return value
 				return cons(code, result);
@@ -83,11 +90,11 @@ public class Instructions {
 		} else { // not an instruction, push it on the stack
 			data = cons(obj, data);
 		}
-
+		
 		// Skip data elements
 		while (!code.isEmpty()) {
 			obj = code.first();
-			if (obj instanceof Instruction) {
+			if (obj instanceof Instruction && obj != quote) {
 				break;
 			}
 			code = code.rest();
@@ -95,6 +102,17 @@ public class Instructions {
 		}
 
 		return cons(code, data);
+	}
+	
+	private static Instruction quote = null;
+	
+	@InstructionTest(tests = { "[[' car =] car]" })
+	@InstructionName(name = "'")
+	public static Object quote() {
+		if (quote == null) {
+			quote = SymbolTable.get("'");
+		}
+		return quote;
 	}
 	
 	@InstructionTest(tests = { "[[dup a = swap a = &&] a]" })
@@ -134,6 +152,10 @@ public class Instructions {
 		return b ? x : y;
 	}
 
+	@InstructionTest(tests={"[[nop] true]"})
+	@InstructionName(name = "nop")
+	public static void nop() {}
+	
 	@InstructionTest(tests={"[[true false pop]]"})
 	@InstructionName(name = "pop")
 	public static void pop(Object o) {
@@ -168,6 +190,12 @@ public class Instructions {
 	@InstructionName(name = "append")
 	public static Program append(Program x, Program y) {
 		return Programs.append(x, y);
+	}
+
+	@InstructionTest(tests={"[[list [a] =] a]"})
+	@InstructionName(name = "list")
+	public static Program toList(Object x) {
+		return Programs.list(x);
 	}
 
 }

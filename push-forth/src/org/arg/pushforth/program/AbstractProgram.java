@@ -1,35 +1,29 @@
 package org.arg.pushforth.program;
 
 public abstract class AbstractProgram implements Program {
-
-	int hash = 0;
 	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		return Programs.print(this, builder, 0).toString();
+		return Programs.print(this, builder, Integer.MAX_VALUE).toString();
 	}
 
 	@Override
 	public int hashCode() {
-		if (isEmpty())
-			return 0;
+		int large = 2147483647; // largest prime smaller than 1<<31
+		int prime1 = 31;
+		int prime2 = 889939283;
 
-		if (hash == 0) {
-			int h = 0;
-			int large = 2147483647; // largest prime smaller than 1<<31
-			int prime1 = 31;
-			int prime2 = 889939283;
-
-			h = (first().hashCode() * prime1) % large;
-			h += (rest().hashCode() * prime2) % large;
-			if (h == 0) {
-				h = -1;
-			}
-			hash = h; // atomic
+		int h = 0;
+		Program prog = this;
+		while (prog != Program.nil) {
+			Object first = prog.first();
+			h += (first.hashCode() * prime1) % large;
+			prog = prog.rest();
+			h = h * prime2;
 		}
-
-		return hash;
+		
+		return h;
 	}
 	
 	@Override

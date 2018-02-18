@@ -27,8 +27,7 @@ public class Programs {
 
 	public static Program cons(Object obj, Program prog) {
 		if (prog == null || obj == null) {
-			throw new NullPointerException(
-					"Lists are not allowed to contain null");
+			throw new NullPointerException("Lists are not allowed to contain null");
 		}
 		return new ConsedProgram(obj, prog);
 	}
@@ -41,14 +40,37 @@ public class Programs {
 		return cons(o1, cons(o2, cons(o3, prog)));
 	}
 
-	public static Program cons(Object o1, Object o2, Object o3, Object o4,
-			Program prog) {
+	public static Program cons(Object o1, Object o2, Object o3, Object o4, Program prog) {
 		return cons(o1, cons(o2, cons(o3, cons(o4, prog))));
 	}
 
-	public static Program cons(Object o1, Object o2, Object o3, Object o4,
-			Object o5, Program prog) {
+	public static Program cons(Object o1, Object o2, Object o3, Object o4, Object o5, Program prog) {
 		return cons(o1, cons(o2, cons(o3, cons(o4, cons(o5, prog)))));
+	}
+
+	// make sure program starts with a list
+	private static Program makeProgram(Program prog) {
+		if (!(prog.first() instanceof Program)) {
+			return Programs.list(Program.nil, prog);
+		}
+		return prog;
+	}
+	
+	/*
+	 *  Merges two programs:
+	 *  	merge( [Code1 Data1], [Code2 Data2] )
+	 *			=> [ append(Code1, Code2), append(Data1, Data2) ]
+	*/
+	public static Program merge(Program first, Program second) {
+		first = makeProgram(first);
+		second = makeProgram(second);
+		
+		Program code1 = (Program) first.first();
+		Program code2 = (Program) second.first();
+		Program data1 = first.rest();
+		Program data2 = second.rest();
+		
+		return cons( append(code1, code2),  append(data1, data2));
 	}
 
 	public static Program list(Object... objs) {
@@ -60,8 +82,7 @@ public class Programs {
 		}
 		for (int i = 0; i < objs.length; ++i) {
 			if (objs[i] == null) {
-				throw new NullPointerException(
-						"Lists are not allowed to contain null");
+				throw new NullPointerException("Lists are not allowed to contain null");
 			}
 		}
 
@@ -80,17 +101,21 @@ public class Programs {
 		return new AppendedProgram(first, second);
 	}
 
-	public static StringBuilder print(Program prog, StringBuilder builder,
-			int depth) {
-		return print(prog, builder, depth, false, false);
+	public static String print(Program prog, int maxDepth) {
+		return print(prog, new StringBuilder(), maxDepth).toString();
 	}
 
-	public static StringBuilder print(Program prog, StringBuilder builder,
-			int depth, boolean pretty, boolean skipBraces) {
-		// if (depth > Globals.RECURSION_DEPTH) {
-		// return builder;
-		// }
-		//
+	public static StringBuilder print(Program prog, StringBuilder builder, int maxDepth) {
+		return print(prog, builder, maxDepth, false, false);
+	}
+
+	public static StringBuilder print(Program prog, StringBuilder builder, int maxDepth, boolean pretty,
+			boolean skipBraces) {
+		if (maxDepth == 0) {
+			builder.append("[...]");
+			return builder;
+		}
+
 		if (!skipBraces)
 			builder.append(delim[0]);
 		boolean first = true;
@@ -103,7 +128,7 @@ public class Programs {
 			}
 
 			if (obj instanceof Program) {
-				print((Program) obj, builder, depth + 1, pretty, false); // don't
+				print((Program) obj, builder, maxDepth - 1, pretty, false); // don't
 																			// skip
 																			// braces
 																			// at
@@ -136,13 +161,11 @@ public class Programs {
 		return builder;
 	}
 
-	public static Program readNextExpression(InputStream stream)
-			throws IOException {
+	public static Program readNextExpression(InputStream stream) throws IOException {
 		return readNextExpression(stream, theMap);
 	}
 
-	public static Program readNextExpression(InputStream stream,
-			InstructionMap theMap) throws IOException {
+	public static Program readNextExpression(InputStream stream, InstructionMap theMap) throws IOException {
 		// first read in a string, then parse the string
 
 		StringBuilder builder = new StringBuilder();
@@ -164,8 +187,7 @@ public class Programs {
 				} else if (ch == '\n' || ch == '\t' || ch == ' ') {
 					continue;
 				}
-				throw new RuntimeException(
-						"Characters found before first bracket");
+				throw new RuntimeException("Characters found before first bracket");
 			}
 
 			if (!inquotes && ch == delim[0]) {
@@ -280,12 +302,10 @@ public class Programs {
 	}
 
 	public static Object parseAtom(CharSequence seq) {
-		return parseAtom(seq, new int[]{0}, theMap);
+		return parseAtom(seq, new int[] { 0 }, theMap);
 	}
 
-	
-	private static Object parseAtom(CharSequence seq, int[] idxPtr,
-			InstructionMap map) {
+	private static Object parseAtom(CharSequence seq, int[] idxPtr, InstructionMap map) {
 
 		boolean inquotes = false;
 		StringBuilder atomBuilder = new StringBuilder();
@@ -368,7 +388,7 @@ public class Programs {
 		if (frst instanceof Program) {
 			return ((Program) prog.first()).isEmpty();
 		}
-		return true;
+		return false;
 	}
 
 	public static int length(Program p) {
@@ -522,15 +542,13 @@ public class Programs {
 	}
 
 	public static double flatDistance(Program a, Program b, int max) {
-		return distance(Programs.list(flatten(a, max)),
-				Programs.list(flatten(b, max)), max);
+		return distance(Programs.list(flatten(a, max)), Programs.list(flatten(b, max)), max);
 	}
 
 	public static String printJoy(Program prog) {
 		StringBuilder builder = new StringBuilder();
 
-		Program code = (Program) (prog instanceof Program ? prog.first()
-				: Program.nil);
+		Program code = (Program) (prog instanceof Program ? prog.first() : Program.nil);
 		Program data = prog.rest();
 		data = reverse(data);
 
@@ -546,7 +564,7 @@ public class Programs {
 		}
 
 		builder.append("<=> ");
-		
+
 		while (!code.isEmpty()) {
 			Object obj = code.first();
 			if (obj instanceof Program) {
@@ -579,6 +597,5 @@ public class Programs {
 
 		return res;
 	}
-
 
 }
