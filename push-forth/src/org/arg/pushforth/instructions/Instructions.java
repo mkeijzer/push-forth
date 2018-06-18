@@ -6,7 +6,7 @@ import static org.arg.pushforth.program.Programs.list;
 import java.util.Collections;
 import java.util.List;
 
-import org.arg.pushforth.annotations.InstructionName;
+import org.arg.pushforth.annotations.InsDef;
 import org.arg.pushforth.annotations.InstructionTest;
 import org.arg.pushforth.annotations.Unpack;
 import org.arg.pushforth.dictionary.InstructionFactory;
@@ -26,7 +26,7 @@ public class Instructions {
 
 	@InstructionTest(tests = { "[[eval eval eval cdr car 2 =] [[1 1 +]] ]",
 			"[[ [swap eval dup car nil? [swap pop] [swap dup i] ?] dup i [[] 2] =] [[1 1 +]] ]" })
-	@InstructionName(name = "eval")
+	@InsDef(name = "eval")
 	public static Program reduce(Program prog) {
 
 		if (prog.isEmpty()) {
@@ -115,20 +115,20 @@ public class Instructions {
 	}
 
 	@InstructionTest(tests = { "[[' car =] [car]]" })
-	@InstructionName(name = "'")
+	@InsDef(name = "'")
 	public static Object quote() {
 		return quote;
 	}
 
 	@InstructionTest(tests = { "[[dup a = swap a = &&] a]" })
-	@InstructionName(name = "dup")
+	@InsDef(name = "dup")
 	@Unpack
 	public static Program dupfunc(Object a) {
 		return Programs.list(a, a);
 	}
 
 	@InstructionTest(tests = { "[[swap pop a =] a b ]" })
-	@InstructionName(name = "swap")
+	@InsDef(name = "swap")
 	@Unpack
 	public static Program swapfunc(Object a, Object b) {
 		return Programs.list(a, b);
@@ -137,7 +137,7 @@ public class Instructions {
 	public static Instruction swap = InstructionFactory.make(Instructions.class, "swapfunc");
 
 	@InstructionTest(tests = { "[[[1] 2 cons [2 1] =]]" })
-	@InstructionName(name = "cons")
+	@InsDef(name = "cons")
 	public static Program consFunc(Object obj, Program prog) {
 		return Programs.cons(obj, prog);
 	}
@@ -148,7 +148,7 @@ public class Instructions {
 	}
 	
 	@InstructionTest(tests = { "[[true i]]]" , "[[i] [cdr car] [false true] ]"})
-	@InstructionName(name = "i")
+	@InsDef(name = "i")
 	@Unpack
 	public static Program ifunc(Program prog) {
 		if (prog.isEmpty()) {
@@ -158,54 +158,54 @@ public class Instructions {
 	}
 
 	@InstructionTest(tests = { "[[true [x] [y] ? x =]]", "[[false [x] [y] ? y =]]" })
-	@InstructionName(name = "?")
+	@InsDef(name = "?")
 	@Unpack
 	public static Program ifte(Program y, Program x, Boolean b) {
 		return b ? x : y;
 	}
 	
 	@InstructionTest(tests = { "[[nop] true]" })
-	@InstructionName(name = "nop")
+	@InsDef(name = "nop")
 	public static void nop() {
 	}
 
 	@InstructionTest(tests = { "[[true false pop]]" })
-	@InstructionName(name = "pop")
+	@InsDef(name = "pop")
 	public static void pop(Object o) {
 	}
 
 	@InstructionTest(tests = { "[[nil isnil?]]" })
-	@InstructionName(name = "isnil?")
+	@InsDef(name = "isnil?")
 	public static boolean isEmpty(Program o) {
 		return o.isEmpty();
 	}
 
 	@InstructionTest(tests = { "[[nil isnil?]]" })
-	@InstructionName(name = "nil")
+	@InsDef(name = "nil")
 	public static Program nil() {
 		return Program.nil;
 	}
 
 	@InstructionTest(tests = { "[[[1] 2 cons car 2 =]]" })
-	@InstructionName(name = "car")
+	@InsDef(name = "car")
 	public static Object first(Program prog) {
 		return prog.isEmpty() ? Program.nil : prog.first();
 	}
 
 	@InstructionTest(tests = { "[[[1] 2 cons cdr [1] =]]" })
-	@InstructionName(name = "cdr")
+	@InsDef(name = "cdr")
 	public static Program rest(Program prog) {
 		return prog.isEmpty() ? Program.nil : prog.rest();
 	}
 
 	@InstructionTest(tests = { "[[[1] [2] append car 2 =]]" })
-	@InstructionName(name = "append")
+	@InsDef(name = "append")
 	public static Program append(Program x, Program y) {
 		return Programs.append(x, y);
 	}
 
 	@InstructionTest(tests = { "[[list [a] =] a]" })
-	@InstructionName(name = "list")
+	@InsDef(name = "list")
 	public static Program toList(Object x) {
 		return Program.nil.cons(x);
 	}

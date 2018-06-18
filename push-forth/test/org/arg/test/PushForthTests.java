@@ -2,7 +2,7 @@ package org.arg.test;
 
 import java.lang.reflect.Method;
 
-import org.arg.pushforth.annotations.InstructionName;
+import org.arg.pushforth.annotations.InsDef;
 import org.arg.pushforth.annotations.InstructionTest;
 import org.arg.pushforth.dictionary.InstructionFactory;
 import org.arg.pushforth.instructions.Instructions;
@@ -78,12 +78,12 @@ public class PushForthTests {
 	// do some tests on data members
 	long val = 0;
 
-	@InstructionName(name = "pft.nw")
+	@InsDef(name = "pft.nw")
 	public static PushForthTests nw() {
 		return new PushForthTests();
 	}
 
-	@InstructionName(name = "pft.add")
+	@InsDef(name = "pft.add")
 	public Long testAdd1(Long value) {
 		val += value;
 		return val;
@@ -93,7 +93,7 @@ public class PushForthTests {
 			"[[pft.nw 3 pft.add pop 2 pft.add pop pft.get swap pop 5 =]]",
 			"[[+ pop 3 =] 2 a 1]",
 			"[[+ 2 =] 2]"}) // tests if we skip 'a', and not 2 (for overloaded instructions)
-	@InstructionName(name = "pft.get")
+	@InsDef(name = "pft.get")
 	public Long get() {
 		return val;
 	}

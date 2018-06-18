@@ -1,6 +1,6 @@
 package org.arg.pushforth.zzz.attic;
 
-import org.arg.pushforth.annotations.InstructionName;
+import org.arg.pushforth.annotations.InsDef;
 import org.arg.pushforth.annotations.Unpack;
 import org.arg.pushforth.dictionary.InstructionFactory;
 import org.arg.pushforth.instructions.Instruction;
@@ -16,7 +16,7 @@ public class Recursion {
 	}
 	
 	@Unpack
-	@InstructionName(name="primrec")
+	@InsDef(name="primrec")
 	public static Program primrecint(Program action, Program ifzero, Long value) {
 		if (value == 0) {
 			return ifzero;

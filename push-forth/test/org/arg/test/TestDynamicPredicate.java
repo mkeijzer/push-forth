@@ -1,7 +1,7 @@
 package org.arg.test;
 
 import org.arg.pushforth.annotations.AdditionalArgumentChecks;
-import org.arg.pushforth.annotations.InstructionName;
+import org.arg.pushforth.annotations.InsDef;
 import org.arg.pushforth.dictionary.InstructionFactory;
 import org.arg.pushforth.dictionary.Predicate;
 import org.arg.pushforth.instructions.Instruction;
@@ -24,7 +24,7 @@ public class TestDynamicPredicate {
 	
 	// only add positive numbers
 	@AdditionalArgumentChecks(predicates={"positive", "positive"})
-	@InstructionName(name="pos+")
+	@InsDef(name="pos+")
 	public static double addPos(Number a, Number b) {
 		return a.doubleValue() + b.doubleValue();
 	}

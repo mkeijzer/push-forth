@@ -3,7 +3,7 @@ package org.arg.pushforth.instructions;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.arg.pushforth.annotations.InstructionName;
+import org.arg.pushforth.annotations.InsDef;
 import org.arg.pushforth.annotations.InstructionTest;
 import org.arg.pushforth.dictionary.InstructionFactory;
 import org.arg.pushforth.program.Program;
@@ -29,19 +29,19 @@ public class Dictionary {
 		this.map.putAll(map);
 	}
 	
-	@InstructionName(name="{}")
+	@InsDef(name="{}")
 	public static Dictionary nw() {
 		return new Dictionary();
 	}
 	
-	@InstructionName(name="{}.put")
+	@InsDef(name="{}.put")
 	public Object put(Object key, Object value) {
 		map.put(key, value);
 		return key;
 	}
 	
 	@InstructionTest(tests={"[[{} hi 2 {}.put {}.get swap pop hi =]]"})
-	@InstructionName(name="{}.get") 
+	@InsDef(name="{}.get") 
 	public Object get(Object key) {
 		Object res = map.get(key);
 		if (res == null) {
@@ -51,7 +51,7 @@ public class Dictionary {
 	}
 
 	@InstructionTest(tests={"[[{} 1 2 {}.put pop {}.clone 3 2 {}.put {}.get 3 = swap pop swap pop]]"})
-	@InstructionName(name="{}.clone") 
+	@InsDef(name="{}.clone") 
 	public Object clone() {
 		return new Dictionary(map);
 	}

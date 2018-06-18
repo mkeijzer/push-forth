@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.arg.pushforth.annotations.AdditionalArgumentChecks;
-import org.arg.pushforth.annotations.InstructionName;
+import org.arg.pushforth.annotations.InsDef;
 import org.arg.pushforth.dictionary.Predicate.TypePredicate;
 import org.arg.pushforth.instructions.Instruction;
 import org.arg.pushforth.program.Program;
@@ -106,7 +106,7 @@ public class InstructionFactory {
 
 		for (Method m : method) {
 
-			InstructionName ann = m.getAnnotation(InstructionName.class);
+			InsDef ann = m.getAnnotation(InsDef.class);
 			if (ann == null) {
 				// skip
 				continue;
@@ -141,7 +141,7 @@ public class InstructionFactory {
 		
 		
 		if (alias.isEmpty() || alias == null) {
-			InstructionName insName = m.getAnnotation(InstructionName.class);
+			InsDef insName = m.getAnnotation(InsDef.class);
 			if (insName == null) {
 				alias = m.getName();
 			} else {

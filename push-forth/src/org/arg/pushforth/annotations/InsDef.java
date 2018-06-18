@@ -13,6 +13,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InstructionName {
+public @interface InsDef {
 	public String name();
 }

@@ -1,6 +1,6 @@
 package org.arg.pushforth.interpreter;
 
-import org.arg.pushforth.annotations.InstructionName;
+import org.arg.pushforth.annotations.InsDef;
 import org.arg.pushforth.annotations.Unpack;
 import org.arg.pushforth.dictionary.InstructionFactory;
 import org.arg.pushforth.instructions.Booleans;
@@ -26,7 +26,7 @@ public class Step {
 	
 	static Program fold = Programs.parse("[> [first] + primrec pop]");
 	
-	@InstructionName(name = "fold")
+	@InsDef(name = "fold")
 	@Unpack
 	public static Program fold() {
 		return fold;

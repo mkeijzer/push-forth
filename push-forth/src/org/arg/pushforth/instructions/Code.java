@@ -2,7 +2,7 @@ package org.arg.pushforth.instructions;
 
 import java.util.List;
 
-import org.arg.pushforth.annotations.InstructionName;
+import org.arg.pushforth.annotations.InsDef;
 import org.arg.pushforth.annotations.InstructionTest;
 import org.arg.pushforth.dictionary.InstructionFactory;
 import org.arg.pushforth.program.Program;
@@ -16,13 +16,13 @@ public class Code {
 		InstructionFactory.readMembers(Code.class);
 	}
 	
-	@InstructionName(name = "?")
+	@InsDef(name = "?")
 	public static Program ifte(Boolean a, Program b, Program c) {
 		return a?b:c;
 	}
 		
 	@InstructionTest(tests={"[[nil?] []]", "[[nil? !] [0]]"})
-	@InstructionName(name = "nil?")
+	@InsDef(name = "nil?")
 	public static Boolean isnil(Program prog) {
 		return prog.isEmpty();
 	}
@@ -31,7 +31,7 @@ public class Code {
 			Program.class, "list?");
 	
 
-	@InstructionName(name = "nth") 
+	@InsDef(name = "nth") 
 	public static Object nth(Program prog, Integer n) {
 		int v = n;
 		while (!prog.isEmpty() && v-- > 0) {
@@ -43,7 +43,7 @@ public class Code {
 		return prog.first();
 	}
 	
-	@InstructionName(name = "nthProgram") 
+	@InsDef(name = "nthProgram") 
 	public static Program nthProgram(Program prog, Integer n) {
 		int v = n;
 		while (!prog.isEmpty() && v-- > 0) {
@@ -55,7 +55,7 @@ public class Code {
 		return prog;
 	}
 	
-	@InstructionName(name="hash") 
+	@InsDef(name="hash") 
 	public static Long hashCode(Object o) {
 		return (long) o.hashCode();
 	}

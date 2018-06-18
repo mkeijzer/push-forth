@@ -1,6 +1,6 @@
 package org.arg.pushforth.instructions;
 
-import org.arg.pushforth.annotations.InstructionName;
+import org.arg.pushforth.annotations.InsDef;
 import org.arg.pushforth.annotations.InstructionTest;
 import org.arg.pushforth.dictionary.InstructionFactory;
 import org.arg.pushforth.program.Program;
@@ -16,19 +16,19 @@ public class Booleans {
 	
 	
 	@InstructionTest(tests={"[[true true &&]]", "[[true false && !]]"})
-	@InstructionName(name = "&&")
+	@InsDef(name = "&&")
 	public static Boolean and(Boolean a, Boolean b) {
 		return a&&b;
 	}
 	
 	@InstructionTest(tests={"[[false !]]", "[[true ! !]]"})
-	@InstructionName(name = "!")
+	@InsDef(name = "!")
 	public static Boolean not(Boolean a) {
 		return !a;
 	}
 	
 	@InstructionTest(tests={"[[=] a a]", "[[= !] a b]"})
-	@InstructionName(name="=")
+	@InsDef(name="=")
 	public static Boolean eq(Object a, Object b) {
 		return a.equals(b);
 	}
