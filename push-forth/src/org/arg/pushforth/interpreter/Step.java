@@ -14,6 +14,10 @@ public class Step {
 
 	String generate = "[ [7 [cons] [append] [primrec] [unit] append append primrec cons ] ]";
 
+	static String g = "[[i false false false instructions cdr] [[] [] false]]";  
+	//"3857: [[] [false false instructions gen] [false] [[] false] [[]]]"
+	
+	
 	static {
 		Instructions.load();
 		Numbers.load();
@@ -33,6 +37,8 @@ public class Step {
 		
 		//String[] a = {"[ [4 [1] nil primrec pop cons pop pop * list? + [*] bool? i + / * primrec << + >> && 1 *]]"};
 		String a = "[[dup i] [dup i] [[dup i] dup i]]";
+		a = "[[' car =] car]";
+		a = g;
 		Main.run(a, true);
 	}
 

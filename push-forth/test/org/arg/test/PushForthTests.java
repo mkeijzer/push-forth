@@ -1,4 +1,4 @@
-package org.arg.test.pushtests;
+package org.arg.test;
 
 import java.lang.reflect.Method;
 
@@ -18,7 +18,6 @@ public class PushForthTests {
 
 	static {
 		InstructionFactory.readMembers(PushForthTests.class);
-		org.arg.img_instructions.Instructions.load();
 	}
 
 	public static Program runTest(Program prog, boolean step) {
@@ -64,6 +63,7 @@ public class PushForthTests {
 							|| ((Boolean) result) != true
 							|| res.rest().rest() != Program.nil) {
 						System.err.println("Test for method: " + m + " failed.");
+						System.out.println();
 						runTest(prog, true);
 						Assert.fail();
 					}

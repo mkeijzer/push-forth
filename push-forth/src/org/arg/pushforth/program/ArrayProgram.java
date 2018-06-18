@@ -56,5 +56,9 @@ class ArrayProgram extends AbstractProgram implements Program {
 		return items.clone();
 	}
 
+	@Override
+	public int length() {
+		return items.length;
+	}
 	
 }

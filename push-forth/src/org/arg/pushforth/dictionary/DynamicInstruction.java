@@ -21,8 +21,9 @@ class DynamicInstruction implements Instruction {
 	final boolean isMemberFunc;
 
 	// TODO, use method handles
-//	final static java.lang.invoke.MethodHandles.Lookup lookup = MethodHandles.lookup();
-//	final MethodHandle mh;
+	// final static java.lang.invoke.MethodHandles.Lookup lookup =
+	// MethodHandles.lookup();
+	// final MethodHandle mh;
 
 	public DynamicInstruction(Method method, String alias, Predicate[] args) {
 		this.method = method;
@@ -32,11 +33,11 @@ class DynamicInstruction implements Instruction {
 
 		unpack = method.getAnnotation(Unpack.class) != null;
 
-//		try {
-//			mh = lookup.unreflect(method);
-//		} catch (IllegalAccessException e) {
-//			throw new RuntimeException(e);
-//		}
+		// try {
+		// mh = lookup.unreflect(method);
+		// } catch (IllegalAccessException e) {
+		// throw new RuntimeException(e);
+		// }
 	}
 
 	public Predicate[] getArgs() {
@@ -65,24 +66,24 @@ class DynamicInstruction implements Instruction {
 		return matchCount(data, 0);
 	}
 
-	public Program apply(Program data) {
+	public Program apply(final Program data) {
 		Program objs = Programs.list();
 
-		Program tmp = data;
+		Program tmpData = data;
 		for (Predicate pred : args) {
 
-			if (tmp.isEmpty()) {
+			if (tmpData.isEmpty()) {
 
 				// Not enough arguments -- put the arguments back on the stack
 				while (!objs.isEmpty()) {
-					tmp = Programs.cons(objs.first(), tmp);
+					tmpData = Programs.cons(objs.first(), tmpData);
 					objs = objs.rest();
 				}
-				return Programs.list(tmp);
+				return Programs.list(tmpData);
 			}
 
-			Object obj = tmp.first();
-			tmp = tmp.rest();
+			Object obj = tmpData.first();
+			tmpData = tmpData.rest();
 
 			boolean canUse = pred.appliesTo(obj, objs);
 
@@ -108,10 +109,10 @@ class DynamicInstruction implements Instruction {
 				// push the valid arguments back on the stack
 				int argsUsed = args.length;
 				while (!objs.isEmpty() && argsUsed-- >= 0) {
-					tmp = Programs.cons(objs.first(), tmp);
+					tmpData = Programs.cons(objs.first(), tmpData);
 					objs = objs.rest();
 				}
-				return Programs.cons(ret, tmp);
+				return Programs.cons(ret, tmpData);
 			}
 
 			objs = Programs.cons(obj, objs);
@@ -134,18 +135,18 @@ class DynamicInstruction implements Instruction {
 			}
 
 			obj = method.invoke(member, fargs);
-			
-//			if (member == null) {
-//				try {
-//					System.out.println("Before " + obj);
-//					obj = mh.invoke(fargs);
-//					System.out.println("After " + obj);
-//
-//				} catch (Throwable e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
+
+			// if (member == null) {
+			// try {
+			// System.out.println("Before " + obj);
+			// obj = mh.invoke(fargs);
+			// System.out.println("After " + obj);
+			//
+			// } catch (Throwable e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
+			// }
 
 		} catch (IllegalArgumentException e) {
 			obj = e.getCause();
@@ -161,17 +162,18 @@ class DynamicInstruction implements Instruction {
 
 		// pushes 'this' back on the stack
 		if (isMemberFunc) {
-			tmp = Programs.cons(member, tmp);
+			tmpData = Programs.cons(member, tmpData);
 		}
 
 		if (unpack && obj instanceof Program) {
-			return Programs.cons(obj, tmp);
+			Program result = Programs.cons(obj, tmpData);
+			return result;
 		}
 
 		if (obj != null) {
-			return Programs.cons(Programs.list(obj), tmp);
+			return Programs.cons(Programs.list(obj), tmpData);
 		} else {
-			return Programs.cons(Program.nil, tmp);
+			return Programs.cons(Program.nil, tmpData);
 		}
 	}
 

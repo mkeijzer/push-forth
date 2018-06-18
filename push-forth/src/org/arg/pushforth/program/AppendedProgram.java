@@ -33,5 +33,10 @@ class AppendedProgram extends AbstractProgram implements Program {
 	public boolean isEmpty() {
 		return false;
 	}
-			
+	
+	@Override
+	public int length() {
+		return first.length() + second.length();
+	}
+	
 }

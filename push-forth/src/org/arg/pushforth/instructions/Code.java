@@ -31,6 +31,30 @@ public class Code {
 			Program.class, "list?");
 	
 
+	@InstructionName(name = "nth") 
+	public static Object nth(Program prog, Integer n) {
+		int v = n;
+		while (!prog.isEmpty() && v-- > 0) {
+			prog = prog.rest();
+		}
+		if (prog.isEmpty()) {
+			return prog;
+		}
+		return prog.first();
+	}
+	
+	@InstructionName(name = "nthProgram") 
+	public static Program nthProgram(Program prog, Integer n) {
+		int v = n;
+		while (!prog.isEmpty() && v-- > 0) {
+			prog = prog.rest();
+		}
+		if (prog.isEmpty()) {
+			return prog;
+		}
+		return prog;
+	}
+	
 	@InstructionName(name="hash") 
 	public static Long hashCode(Object o) {
 		return (long) o.hashCode();

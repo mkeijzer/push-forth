@@ -26,10 +26,7 @@ public class Programs {
 	public static final String programDelimiter = ".";
 
 	public static Program cons(Object obj, Program prog) {
-		if (prog == null || obj == null) {
-			throw new NullPointerException("Lists are not allowed to contain null");
-		}
-		return new ConsedProgram(obj, prog);
+		return prog.cons(obj);
 	}
 
 	public static Program cons(Object o1, Object o2, Program prog) {
@@ -94,11 +91,7 @@ public class Programs {
 	}
 
 	public static Program append(Program first, Program second) {
-		if (first.isEmpty()) {
-			return second;
-		}
-
-		return new AppendedProgram(first, second);
+		return second.append(first);
 	}
 
 	public static String print(Program prog, int maxDepth) {
