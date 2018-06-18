@@ -190,7 +190,7 @@ public class InstructionFactory {
 			overloadedMap.put(name, instructions);
 			
 			if (SymbolTable.get(name) != null) {
-				throw new RuntimeException("Non-dynamic instruction found");
+				throw new RuntimeException("Non-dynamic instruction found: " + name + " " + SymbolTable.get(name));
 			}
 			SymbolTable.put(name, ins);
 			return ins;

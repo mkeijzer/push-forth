@@ -170,6 +170,7 @@ class DynamicInstruction implements Instruction {
 			return result;
 		}
 
+		// if return value is null, skip
 		if (obj != null) {
 			return Programs.cons(Programs.list(obj), tmpData);
 		} else {

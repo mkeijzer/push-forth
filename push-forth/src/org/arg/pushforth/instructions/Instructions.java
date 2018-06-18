@@ -74,7 +74,7 @@ public class Instructions {
 			}
 
 			Object ret = result.first();
-	
+
 			if (!(ret instanceof Program)) { // got something of the form [x y
 												// z] , so no return value
 				return cons(code, result);
@@ -146,8 +146,8 @@ public class Instructions {
 	static {
 		iList = Programs.list(SymbolTable.get("i"));
 	}
-	
-	@InstructionTest(tests = { "[[true i]]]" , "[[i] [cdr car] [false true] ]"})
+
+	@InstructionTest(tests = { "[[true i]]]", "[[i] [cdr car] [false true] ]" })
 	@InsDef(name = "i")
 	@Unpack
 	public static Program ifunc(Program prog) {
@@ -163,7 +163,7 @@ public class Instructions {
 	public static Program ifte(Program y, Program x, Boolean b) {
 		return b ? x : y;
 	}
-	
+
 	@InstructionTest(tests = { "[[nop] true]" })
 	@InsDef(name = "nop")
 	public static void nop() {
@@ -186,16 +186,16 @@ public class Instructions {
 		return Program.nil;
 	}
 
-	@InstructionTest(tests = { "[[[1] 2 cons car 2 =]]" })
+	@InstructionTest(tests = { "[[[1] 2 cons car 2 =]]", "[[car true] []]" })
 	@InsDef(name = "car")
 	public static Object first(Program prog) {
-		return prog.isEmpty() ? Program.nil : prog.first();
+		return prog.isEmpty() ? null : prog.first();
 	}
 
-	@InstructionTest(tests = { "[[[1] 2 cons cdr [1] =]]" })
+	@InstructionTest(tests = { "[[[1] 2 cons cdr [1] =]]", "[[cdr true] []]" })
 	@InsDef(name = "cdr")
 	public static Program rest(Program prog) {
-		return prog.isEmpty() ? Program.nil : prog.rest();
+		return prog.isEmpty() ? null : prog.rest();
 	}
 
 	@InstructionTest(tests = { "[[[1] [2] append car 2 =]]" })
