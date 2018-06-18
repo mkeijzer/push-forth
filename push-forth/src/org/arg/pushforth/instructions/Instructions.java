@@ -18,7 +18,7 @@ public class Instructions {
 
 	public static final List<Instruction> instructions;
 	static {
-		instructions = Collections.unmodifiableList(InstructionFactory.readMembers(Instructions.class));
+		instructions = Collections.unmodifiableList(InstructionFactory.registerMembers(Instructions.class));
 	}
 
 	public static void load() {

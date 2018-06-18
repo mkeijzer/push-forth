@@ -12,7 +12,7 @@ public class Recursion {
 
 	static {
 		Instructions.load();
-		InstructionFactory.readMembers(Recursion.class);
+		InstructionFactory.registerMembers(Recursion.class);
 	}
 	
 	@Unpack

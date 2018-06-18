@@ -98,7 +98,7 @@ public class InstructionFactory {
 	 * @param clazz
 	 * @return
 	 */
-	public static List<Instruction> readMembers(Class<?> clazz) {
+	public static List<Instruction> registerMembers(Class<?> clazz) {
 
 		Method[] method = clazz.getDeclaredMethods();
 

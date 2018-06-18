@@ -10,7 +10,7 @@ import org.arg.pushforth.program.Programs;
 public class RandomInstructions {
 
 	static {
-		InstructionFactory.readMembers(RandomInstructions.class);
+		InstructionFactory.registerMembers(RandomInstructions.class);
 	}
 
 	@InsDef(name = "rand")

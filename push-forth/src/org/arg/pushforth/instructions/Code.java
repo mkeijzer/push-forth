@@ -13,7 +13,7 @@ public class Code {
 	static public void load() {}
 	
 	static {
-		InstructionFactory.readMembers(Code.class);
+		InstructionFactory.registerMembers(Code.class);
 	}
 	
 	@InsDef(name = "?")

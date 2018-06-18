@@ -11,7 +11,7 @@ public class Booleans {
 	static public void load() {}
 	
 	static {
-		InstructionFactory.readMembers(Booleans.class);
+		InstructionFactory.registerMembers(Booleans.class);
 	}
 	
 	

@@ -16,7 +16,7 @@ import org.arg.pushforth.program.Program;
 public class Dictionary {
 
 	static {
-		InstructionFactory.readMembers(Dictionary.class);
+		InstructionFactory.registerMembers(Dictionary.class);
 	}
 	public static void load() {}
 	

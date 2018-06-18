@@ -17,7 +17,7 @@ import org.junit.Test;
 public class PushForthTests {
 
 	static {
-		InstructionFactory.readMembers(PushForthTests.class);
+		InstructionFactory.registerMembers(PushForthTests.class);
 	}
 
 	public static Program runTest(Program prog, boolean step) {
